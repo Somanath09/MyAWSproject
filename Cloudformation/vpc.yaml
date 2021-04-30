@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation first temolate'
+Resources:
+    myVPC:
+        Type: AWS::EC2::VPC
+        Properties:
+            CidrBlock: 10.0.0.0/16
+            InstanceTenancy: default
+            Tags:
+            - Key: Name
+              Value: firstcloudformation
+    mySubnet:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref myVPC
+            CidrBlock: 10.0.1.0/24
+            AvailabilityZone: "us-east-2a"
+            Tags:
+            - Key: Name
+              Value: publicsubnet       
+    myprivateSubnet:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref myVPC
+            CidrBlock: 10.0.2.0/24
+            AvailabilityZone: "us-east-2a"
+            Tags:
+            - Key: Name
+              Value: privatesubnet
+    myInternetGateway:
+        Type: AWS::EC2::InternetGateway
+        Properties:
+            Tags:
+            - Key: Name
+              Value: InternetGateway   
+    AttachGateway:
+        Type: AWS::EC2::VPCGatewayAttachment
+        Properties:
+            VpcId: !Ref myVPC
+            InternetGatewayId: !Ref myInternetGateway
+    myRouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties:
+            VpcId:  !Ref myVPC
+            Tags:
+            - Key: Name
+              Value: publicroutetable
+    mySubnetRouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref mySubnet
+            RouteTableId: !Ref myRouteTable
+    myRoute:
+        Type: AWS::EC2::Route
+        Properties:
+            RouteTableId: !Ref myRouteTable
+            DestinationCidrBlock: 0.0.0.0/0
+            GatewayId: !Ref myInternetGateway
+    MyEIP:
+        Type: AWS::EC2::EIP
+        DependsOn: AttachGateway
+        Properties:
+            Domain: VPC
+            Tags:
+            - Key: Name
+              Value: MyEIP
+    NAT:
+        Type: AWS::EC2::NatGateway
+        DependsOn: MyEIP
+        Properties:
+            AllocationId:
+                Fn::GetAtt:
+                - MyEIP
+                - AllocationId
+            SubnetId: !Ref mySubnet
+            Tags:
+            - Key: Name
+              Value: myFirstNAT
+    myprivateRouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties:
+            VpcId:  !Ref myVPC
+            Tags:
+            - Key: Name
+              Value: privateroutetable
+    mySubnetprivateRouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref myprivateSubnet
+            RouteTableId: !Ref myprivateRouteTable
+    Route:
+        Type: AWS::EC2::Route
+        Properties:
+            RouteTableId: !Ref myprivateRouteTable
+            DestinationCidrBlock: 0.0.0.0/0
+            NatGatewayId: !Ref NAT
+        
+Outputs:
+    customvpc:
+        Value: !Ref myVPC
+    publicsubnet:
+        Value: !Ref mySubnet  
+    privatesubnet:
+        Value: !Ref myprivateSubnet   
+    InternetGateway:
+        Value: !Ref myInternetGateway
+    myRouteTable:
+        Value: !Ref myRouteTable
+    
+    
+    
