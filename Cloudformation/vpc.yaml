@@ -125,7 +125,7 @@ Resources:
             ImageId: "ami-0f57b4cec24530068"
             SubnetId: !Ref mySubnet
             SecurityGroupIds: [!Ref MySecurityGroup]
-            KeyName: "SomuFirst"
+            KeyName: "Somufirst"
             BlockDeviceMappings: 
             - DeviceName: "/dev/sdm"
               Ebs: 
