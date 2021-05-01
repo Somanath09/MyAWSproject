@@ -98,7 +98,7 @@ Resources:
             NatGatewayId: !Ref NAT
     MySecurityGroup:
         Type: AWS::EC2::SecurityGroup
-        Dependson: myVPC
+        DependsOn: myVPC
         Properties: 
             GroupDescription: "my ec2 security group"
             GroupName: "Myec2SG"
@@ -119,7 +119,7 @@ Resources:
             VpcId: !Ref myVPC
     MyEC2Instance: 
         Type: AWS::EC2::Instance
-        Dependson: mySecurityGroup   
+        DependsOn: mySecurityGroup   
         Properties: 
             InstanceType: "t2.micro"
             ImageId: "ami-0f57b4cec24530068"
