@@ -124,7 +124,7 @@ Resources:
             InstanceType: "t2.micro"
             ImageId: "ami-0f57b4cec24530068"
             SubnetId: !Ref mySubnet
-            SecurityGroupIds: !Ref MySecurityGroup
+            SecurityGroupIds: [!Ref MySecurityGroup]
             KeyName: "SomuFirst"
             BlockDeviceMappings: 
             - DeviceName: "/dev/sdm"
