@@ -119,7 +119,7 @@ Resources:
             VpcId: !Ref myVPC
     MyEC2Instance: 
         Type: AWS::EC2::Instance
-        DependsOn: mySecurityGroup   
+        DependsOn: MySecurityGroup   
         Properties: 
             InstanceType: "t2.micro"
             ImageId: "ami-0f57b4cec24530068"
