@@ -138,7 +138,7 @@ Resources:
             NetworkInterfaces: 
               - AssociatePublicIpAddress: "true"
                 DeviceIndex: "0"
-                GroupSet: !Ref MySecurityGroup
+                GroupSet: [!Ref MySecurityGroup]
                 SubnetId: !Ref mySubnet
 Outputs:
     customvpc:
