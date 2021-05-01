@@ -96,7 +96,45 @@ Resources:
             RouteTableId: !Ref myprivateRouteTable
             DestinationCidrBlock: 0.0.0.0/0
             NatGatewayId: !Ref NAT
-        
+    MySecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Dependson: myVPC
+        Properties: 
+            GroupDescription: "my ec2 security group"
+            GroupName: "Myec2SG"
+            SecurityGroupIngress:
+            - IpProtocol: tcp
+                FromPort: 80
+                ToPort: 80
+                CidrIp: 0.0.0.0/0
+            - IpProtocol: ssh
+                FromPort: 22
+                ToPort: 22
+                CidrIp: 0.0.0.0/0
+            SecurityGroupEgress:
+            - IpProtocol: tcp
+                FromPort: 80
+                ToPort: 80
+                CidrIp: 0.0.0.0/0
+            VpcId: !Ref myVPC
+    MyEC2Instance: 
+        Type: AWS::EC2::Instance
+        Dependson: mySecurityGroup   
+        Properties: 
+            InstanceType: "t2.micro"
+            ImageId: "ami-0f57b4cec24530068"
+            SubnetId: !Ref mySubnet
+            SecurityGroupIds: !Ref MySecurityGroup
+            KeyName: "SomuFirst"
+            BlockDeviceMappings: 
+            - DeviceName: "/dev/sdm"
+                Ebs: 
+                VolumeType: "io1"
+                Iops: "200"
+                DeleteOnTermination: "false"
+                VolumeSize: "20"
+            - DeviceName: "/dev/sdk"
+                NoDevice: {}
 Outputs:
     customvpc:
         Value: !Ref myVPC
