@@ -135,6 +135,11 @@ Resources:
                 VolumeSize: "20"
             - DeviceName: "/dev/sdk"
               NoDevice: {}
+            NetworkInterfaces: 
+              - AssociatePublicIpAddress: "true"
+                DeviceIndex: "0"
+                GroupSet: !Ref MySecurityGroup
+                SubnetId: !Ref mySubnet
 Outputs:
     customvpc:
         Value: !Ref myVPC
