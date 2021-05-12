@@ -33,7 +33,7 @@ Resources:
         DependsOn: MySecurityGroup   
         Properties: 
             InstanceType: "t2.micro"
-            ImageId: "ami-0f57b4cec24530068"
+            ImageId: "ami-0d5eff06f840b45e9"
             KeyName: "Somufirst"
             BlockDeviceMappings: 
             - DeviceName: "/dev/sdm"
